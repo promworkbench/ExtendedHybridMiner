@@ -1,0 +1,29 @@
+package org.processmining.extendedhybridminer.plugins;
+
+import java.io.InputStream;
+
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import org.processmining.contexts.uitopia.annotations.UIImportPlugin;
+import org.processmining.extendedhybridminer.models.hybridpetrinet.HybridPetrinet;
+import org.processmining.framework.abstractplugins.AbstractImportPlugin;
+import org.processmining.framework.plugin.PluginContext;
+import org.processmining.framework.plugin.annotations.Plugin;
+import org.processmining.framework.plugin.annotations.PluginLevel;
+
+@Plugin(name = "Import Hybrid Petri Net from PNML File", level = PluginLevel.Regular, parameterLabels = { "Filename" }, returnLabels = { "Hybrid Petri Net" }, returnTypes = { HybridPetrinet.class})
+@UIImportPlugin(description = "PNML Hybrid Petri Net files", extensions = { "pnml" })
+	public class HybridPNImporter extends AbstractImportPlugin {
+	
+	        protected FileFilter getFileFilter() {
+	                return new FileNameExtensionFilter("PNML Hybrid Petri Net files", "pnml");
+	        }
+	
+	        protected Object importFromStream(PluginContext context, InputStream input, String filename, long fileSizeInBytes)
+	                        throws Exception {
+	        	HybridPetrinet net = new HybridPetrinet("ff");
+	        	net.importFromStream(context, input);
+	        	return net;
+	        }       
+}
