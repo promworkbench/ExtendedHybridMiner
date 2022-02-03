@@ -4,9 +4,10 @@ import java.awt.geom.Point2D;
 import java.util.Map;
 
 import org.jgraph.graph.GraphConstants;
-import org.processmining.extendedhybridminer.models.hybridpetrinet.HybridPetrinet;
-import org.processmining.extendedhybridminer.models.hybridpetrinet.SureTransitionsArc;
-import org.processmining.extendedhybridminer.models.hybridpetrinet.UncertainTransitionsArc;
+import org.processmining.extendedhybridminer.models.hybridpetrinet.ExtendedHybridPetrinet;
+import org.processmining.extendedhybridminer.models.hybridpetrinet.LongDepEdge;
+import org.processmining.extendedhybridminer.models.hybridpetrinet.SureEdge;
+import org.processmining.extendedhybridminer.models.hybridpetrinet.UncertainEdge;
 import org.processmining.framework.util.Pair;
 import org.processmining.models.connections.GraphLayoutConnection;
 import org.processmining.models.graphbased.AbstractGraphElement;
@@ -30,7 +31,6 @@ import org.processmining.plugins.pnml.elements.extensions.PnmlInscription;
 import org.processmining.plugins.pnml.elements.graphics.PnmlArcGraphics;
 import org.processmining.plugins.pnml.toolspecific.PnmlToolSpecific;
 import org.xmlpull.v1.XmlPullParser;
-
 /**
  * Basic PNML arc object.
  * 
@@ -325,16 +325,17 @@ public class PnmlArc extends PnmlBasicObject {
 				arc = ((ResetInhibitorNet) net).addResetArc(placeMap.get(target), transitionMap.get(source),
 						firstCommonAncestor(sourceSubNet, targetSubNet));
 			}
-		} else if (transitionMap.containsKey(source) && transitionMap.containsKey(target) && net instanceof HybridPetrinet) {
+		} else if (transitionMap.containsKey(source) && transitionMap.containsKey(target) && net instanceof ExtendedHybridPetrinet) {
 			ExpandableSubNet sourceSubNet = transitionMap.get(source).getParent();
 			ExpandableSubNet targetSubNet = transitionMap.get(target).getParent();
-			if (arcType.isHybridSure()) {
-				arc = ((HybridPetrinet) net).addSureArc(transitionMap.get(source), transitionMap.get(target));
+			if (arcType.isHybridLongDep()) {
+				arc = ((ExtendedHybridPetrinet) net).addLongDepArc(transitionMap.get(source), transitionMap.get(target));
+			} else if (arcType.isHybridSure()) {
+				arc = ((ExtendedHybridPetrinet) net).addSureArc(transitionMap.get(source), transitionMap.get(target));
 			} else if (arcType.isHybridUnsure()) {
-				arc = ((HybridPetrinet) net).addUnsureArc(transitionMap.get(source), transitionMap.get(target));
+				arc = ((ExtendedHybridPetrinet) net).addUnsureArc(transitionMap.get(source), transitionMap.get(target));
 			}
 			firstCommonAncestor(sourceSubNet, targetSubNet);
-
 		}
 		/*
 		 * If arc created, set graphics and inscription.
@@ -417,10 +418,13 @@ public class PnmlArc extends PnmlBasicObject {
 		}
 		target = idMap.get(new Pair<DirectedGraphElement, ExpandableSubNet>(targetNode, parent));
 		inscription = factory.createPnmlInscription().convertFromNet(edge);
-		if (edge instanceof SureTransitionsArc) {
+		if (edge instanceof LongDepEdge) {
+			arcType = factory.createPnmlArcType(PnmlArcType.TAG);
+			arcType.setHybridLongDep();
+		} else if (edge instanceof SureEdge) {
 			arcType = factory.createPnmlArcType(PnmlArcType.TAG);
 			arcType.setHybridSure();
-		} else if (edge instanceof UncertainTransitionsArc) {
+		} else if (edge instanceof UncertainEdge) {
 			arcType = factory.createPnmlArcType(PnmlArcType.TAG);
 			arcType.setHybridUnsure();
 		} else if (edge instanceof Arc) {
@@ -432,7 +436,7 @@ public class PnmlArc extends PnmlBasicObject {
 		} else if (edge instanceof InhibitorArc) {
 			arcType = factory.createPnmlArcType(PnmlArcType.TAG);
 			arcType.setInhibitor();
-		} 
+		}
 		graphics = factory.createPnmlArcGraphics().convertFromNet(parent, edge, layout);
 		return this;
 	}

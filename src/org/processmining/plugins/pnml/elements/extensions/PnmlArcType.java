@@ -84,7 +84,7 @@ public class PnmlArcType extends PnmlAnnotation {
 	public boolean isRead() {
 		return (text != null) && (text.getText() != null) && text.getText().equals("read");
 	}
-
+	
 	public boolean isHybridSure() {
 		return (text != null) && (text.getText() != null) && text.getText().equals("sure");
 	}
@@ -93,7 +93,10 @@ public class PnmlArcType extends PnmlAnnotation {
 		return (text != null) && (text.getText() != null) && text.getText().equals("unsure");
 	}
 	
-	
+	public boolean isHybridLongDep() {
+		return (text != null) && (text.getText() != null) && text.getText().equals("longDep");
+	}
+
 	public void setNormal() {
 		text = factory.createPnmlText("normal");
 	}
@@ -116,6 +119,10 @@ public class PnmlArcType extends PnmlAnnotation {
 	
 	public void setHybridUnsure() {
 		text = factory.createPnmlText("unsure");
+	}
+	
+	public void setHybridLongDep() {
+		text = factory.createPnmlText("longDep");
 	}
 
 }
