@@ -25,7 +25,6 @@ import org.processmining.extendedhybridminer.models.hybridpetrinet.candidateplac
 import org.processmining.extendedhybridminer.models.hybridpetrinet.candidateplaceiterator.EdgesOrderingIteratorOpt;
 import org.processmining.extendedhybridminer.models.hybridpetrinet.candidateplaceiterator.EdgesOrderingIteratorOptNew_FV;
 import org.processmining.extendedhybridminer.models.hybridpetrinet.candidateplaceiterator.MinimalEdgeOrdering;
-import org.processmining.extendedhybridminer.models.hybridpetrinet.candidateplaceiterator.MinimalEdgeOrderingBackwards;
 import org.processmining.extendedhybridminer.models.hybridpetrinet.candidateplaceiterator.NodesOrderingIteratorOptNew;
 import org.processmining.extendedhybridminer.models.hybridpetrinet.candidateplaceiterator.OutputThenInputOrderingIterator;
 import org.processmining.extendedhybridminer.models.hybridpetrinet.candidateplacestrategy.CandidatePlaceSelectionStrategy;
@@ -37,7 +36,6 @@ import org.processmining.extendedhybridminer.models.hybridpetrinet.conflictstrat
 import org.processmining.extendedhybridminer.models.hybridpetrinet.conflictstrategy.DefaultConflictStrategyOptNew;
 import org.processmining.extendedhybridminer.models.hybridpetrinet.conflictstrategy.DefaultConflictStrategyOptNewOutput;
 import org.processmining.extendedhybridminer.models.hybridpetrinet.conflictstrategy.MinimalPlaces;
-import org.processmining.extendedhybridminer.models.hybridpetrinet.conflictstrategy.MinimalPlacesBackwards;
 import org.processmining.extendedhybridminer.models.hybridpetrinet.conflictstrategy.NoConflictStrategy;
 import org.processmining.models.graphbased.NodeID;
 import org.processmining.models.graphbased.directed.AbstractDirectedGraphEdge;
@@ -221,9 +219,6 @@ public class Cluster<E extends HybridDirectedGraphEdge, N extends AbstractDirect
 			case MINIMAL:
 				return new MinimalEdgeOrdering((EdgesOrderingCompatibleSelStrategy<N>)selectionStrategy, (MinimalPlaces) this.conflictStrategy, this.edges, removedEdges,this.outputNodes, this.inputNodes, (MinimalPlaces) conflict, this.thresholdStopIt);
 			
-			case MINIMAL_BACKWARDS:
-				return new MinimalEdgeOrderingBackwards<N, HybridDirectedGraphEdge>((EdgesOrderingCompatibleSelStrategy<N>)selectionStrategy, (MinimalPlacesBackwards<N>) this.conflictStrategy, this.edges, this.outputNodes, this.inputNodes);
-				
 				
 			default:
 				throw new RuntimeException("Please select or implement the right CandidatePlaceIterator class!");

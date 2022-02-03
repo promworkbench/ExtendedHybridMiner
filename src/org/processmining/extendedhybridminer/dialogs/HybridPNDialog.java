@@ -26,15 +26,12 @@ import org.processmining.extendedhybridminer.plugins.HybridPNMinerSettings;
 public class HybridPNDialog extends JPanel 
 {
 
-	// Added by sabi
 	JPanel timeoutPanel,orderingStrategyPanel,fTypePanel,placeNumberPanel, stopPanel;
 	JCheckBox timeoutBox,placeoutBox;
 	JComboBox fType;
 	JTextField timeoutField,placeNumberField,inputPlaceField,outputPlaceField,maxPlaceField, stopField;
 	
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = -3587595452197538653L;
 	@SuppressWarnings("unused")
 	//private FuzzyCGConfiguration configuration;

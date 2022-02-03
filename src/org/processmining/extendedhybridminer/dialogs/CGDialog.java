@@ -18,9 +18,6 @@ import org.processmining.extendedhybridminer.plugins.HybridCGMinerSettings;
 
 public class CGDialog extends JPanel {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -3587595452197538653L;
 	@SuppressWarnings("unused")
 	//private FuzzyCGConfiguration configuration;
