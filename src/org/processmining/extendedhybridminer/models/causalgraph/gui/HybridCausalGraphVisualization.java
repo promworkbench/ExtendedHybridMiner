@@ -2000,7 +2000,7 @@ public class HybridCausalGraphVisualization extends JLayeredPane implements Hybr
 				XLogInfo logInfo = XLogInfoFactory.createLogInfo(log, settings.getClassifier());
 				XLog filteredLog = LogFilterer.filterLogByActivityFrequency(log, logInfo, settings);
 		        
-		        TraceVariantsLog variants = new TraceVariantsLog(filteredLog, settings.getActivityFrequencyMap(), settings.getTraceVariantsThreshold());
+		        TraceVariantsLog variants = new TraceVariantsLog(filteredLog, settings, settings.getTraceVariantsThreshold());
 				fCG.emptyGraph();
 		        HybridCGMiner miner = new HybridCGMiner(filteredLog, filteredLog.getInfo(settings.getClassifier()), variants, settings);
 				miner.updateCG(fCG);
@@ -2029,7 +2029,7 @@ public class HybridCausalGraphVisualization extends JLayeredPane implements Hybr
 				Color sureColor = fCG.getSureColor();
 				Color unsureColor = fCG.getUnsureColor();
 				Color longDepColor = fCG.getLongDepColor();
-		        TraceVariantsLog variants = new TraceVariantsLog(filteredLog, settings.getActivityFrequencyMap(), settings.getTraceVariantsThreshold());
+		        TraceVariantsLog variants = new TraceVariantsLog(filteredLog, settings, settings.getTraceVariantsThreshold());
 				HybridCGMiner miner = new HybridCGMiner(filteredLog, filteredLog.getInfo(settings.getClassifier()), variants, settings);
 				fCG.emptyGraph();
 				miner.updateCG(fCG);

@@ -17,11 +17,11 @@ import javax.swing.SwingConstants;
 import org.jgraph.graph.AttributeMap.SerializablePoint2D;
 import org.jgraph.graph.GraphConstants;
 import org.processmining.contexts.uitopia.annotations.Visualizer;
-import org.processmining.extendedhybridminer.models.hybridpetrinet.HybridPetrinet;
-import org.processmining.extendedhybridminer.models.hybridpetrinet.LongDepTransitionsArc;
-import org.processmining.extendedhybridminer.models.hybridpetrinet.SureTransitionsArc;
-import org.processmining.extendedhybridminer.models.hybridpetrinet.TransitionsArc;
-import org.processmining.extendedhybridminer.models.hybridpetrinet.UncertainTransitionsArc;
+import org.processmining.extendedhybridminer.models.hybridpetrinet.ExtendedHybridPetrinet;
+import org.processmining.extendedhybridminer.models.hybridpetrinet.LongDepEdge;
+import org.processmining.extendedhybridminer.models.hybridpetrinet.SureEdge;
+import org.processmining.extendedhybridminer.models.hybridpetrinet.Edge;
+import org.processmining.extendedhybridminer.models.hybridpetrinet.UncertainEdge;
 import org.processmining.framework.connections.ConnectionCannotBeObtained;
 import org.processmining.framework.connections.ConnectionManager;
 import org.processmining.framework.plugin.PluginContext;
@@ -35,11 +35,11 @@ import org.processmining.models.graphbased.AttributeMap;
 import org.processmining.models.graphbased.ViewSpecificAttributeMap;
 import org.processmining.models.graphbased.directed.petrinet.elements.Arc;
 import org.processmining.models.graphbased.directed.petrinet.elements.Place;
-import org.processmining.models.heuristics.HeuristicsNet;
+//import org.processmining.models.heuristics.HeuristicsNet;
 import org.processmining.models.jgraph.ProMGraphModel;
 import org.processmining.models.jgraph.ProMJGraph;
 import org.processmining.models.jgraph.elements.ProMGraphPort;
-import org.processmining.plugins.heuristicsnet.visualizer.annotatedvisualization.AnnotatedVisualizationSettings;
+//import org.processmining.plugins.heuristicsnet.visualizer.annotatedvisualization.AnnotatedVisualizationSettings;
 
 import com.jgraph.layout.JGraphFacade;
 import com.jgraph.layout.JGraphLayoutProgress;
@@ -50,7 +50,7 @@ import com.jgraph.layout.hierarchical.JGraphHierarchicalLayout;
 public class HybridPetrinetVisualizer {
 	
 	@PluginVariant(requiredParameterLabels = { 0 })
-    public static JComponent visualize(PluginContext context, HybridPetrinet fPN) throws Exception {
+    public static JComponent visualize(PluginContext context, ExtendedHybridPetrinet fPN) throws Exception {
 	       
         JComponent result = HybridPetrinetVisualizer.getVisualizationPanel(fPN, new ProgressBarImpl(context));
         context.addConnection(new GraphLayoutConnection(fPN.getGraph()));
@@ -72,12 +72,12 @@ public class HybridPetrinetVisualizer {
 	};
 
 	public static HybridPetrinetVisualization getVisualizationPanel(
-			HybridPetrinet graph, 
+			ExtendedHybridPetrinet graph, 
 			Progress progress) throws Exception {
 		return getResultsPanel(graph, new ViewSpecificAttributeMap(), progress);
 	}
 
-	public static HybridPetrinetVisualization getResultsPanel(HybridPetrinet graph,
+	public static HybridPetrinetVisualization getResultsPanel(ExtendedHybridPetrinet graph,
 			ViewSpecificAttributeMap map, Progress progress) throws Exception {
 		
 		ProMJGraph jgraph = createJGraph(graph, map, progress);
@@ -85,7 +85,7 @@ public class HybridPetrinetVisualizer {
 		return new HybridPetrinetVisualization(jgraph, graph);
 	}
 	
-	public static ProMJGraph createJGraph(HybridPetrinet fuzzyPetrinet,
+	public static ProMJGraph createJGraph(ExtendedHybridPetrinet fuzzyPetrinet,
 			ViewSpecificAttributeMap map, Progress progress) throws Exception{
 		
 		Color surePlaceColor = fuzzyPetrinet.getSurePlaceColor();
@@ -94,13 +94,13 @@ public class HybridPetrinetVisualizer {
 		Color ldColor = fuzzyPetrinet.getLDColor();
 		Set<?> edges=fuzzyPetrinet.getEdges();
 		for(Object e:edges) {
-			if(e instanceof SureTransitionsArc) {
-				((TransitionsArc) e).setEdgeColor(sureColor);
+			if(e instanceof SureEdge) {
+				((Edge) e).setEdgeColor(sureColor);
 			}
-			else if(e instanceof UncertainTransitionsArc) {
-				((TransitionsArc) e).setEdgeColor(unsureColor);
-			} else if(e instanceof LongDepTransitionsArc) {
-				((TransitionsArc) e).setEdgeColor(ldColor);
+			else if(e instanceof UncertainEdge) {
+				((Edge) e).setEdgeColor(unsureColor);
+			} else if(e instanceof LongDepEdge) {
+				((Edge) e).setEdgeColor(ldColor);
 			} else if(e instanceof Arc) {
 				((Arc) e).getAttributeMap().put(AttributeMap.EDGECOLOR, surePlaceColor);
 			}			
@@ -402,13 +402,13 @@ public class HybridPetrinetVisualizer {
 		}
 	}
 
-	public static JComponent visualizeGraph(
+	/*public static JComponent visualizeGraph(
 			HybridPetrinet graph, 
 			HeuristicsNet net, 
 			AnnotatedVisualizationSettings settings, 
 			Progress progress) throws Exception {
 		
 		return getResultsPanel(graph, new ViewSpecificAttributeMap(), progress);
-	}
+	}*/
 }
 

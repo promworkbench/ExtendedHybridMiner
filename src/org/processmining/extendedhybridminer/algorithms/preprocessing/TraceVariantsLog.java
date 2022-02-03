@@ -2,7 +2,7 @@ package org.processmining.extendedhybridminer.algorithms.preprocessing;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.deckfour.xes.extension.std.XConceptExtension;
@@ -11,6 +11,7 @@ import org.deckfour.xes.extension.std.XLifecycleExtension.StandardModel;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
+import org.processmining.extendedhybridminer.plugins.HybridCGMinerSettings;
 
 public class TraceVariantsLog {
 	//protected int size;
@@ -22,14 +23,15 @@ public class TraceVariantsLog {
 	
 	
 	
-	public TraceVariantsLog(XLog log, Map<String, Integer> activityFrequencyMap, double freq) {
+	public TraceVariantsLog(XLog log, HybridCGMinerSettings settings, double freq) {
 		this.originalLogSize = log.size();
 		this.numberOfCoveredTraces = 0;
 		this.variants = new ArrayList<TraceVariant>();
 		this.minimalFrequency = (int) Math.ceil(this.originalLogSize * freq);
 		//this.logName = XConceptExtension.instance().extractName(log);
 		//this.logInfo = XLogInfoFactory.createLogInfo(log, XLogInfoImpl.NAME_CLASSIFIER);
-			
+		
+		Map<String, Integer> activityFrequencyMap = new HashMap<String, Integer>();
 		nonFilteredVariants = new ArrayList<TraceVariant>();
 		outerloop:
 		for (XTrace trace : log) {
@@ -67,17 +69,21 @@ public class TraceVariantsLog {
 		
 		for (TraceVariant t: nonFilteredVariants) {
 			int f = t.getFrequency();
-			if (f < this.minimalFrequency) {
-				for (String activity: new HashSet<String>(t.getActivities())) {
-					int actFreq = activityFrequencyMap.get(activity) - f;
-					activityFrequencyMap.put(activity, actFreq);
-					
-				}
-			} else {
+			if (f >= this.minimalFrequency) {
 				this.variants.add(t);
 				this.numberOfCoveredTraces = this.numberOfCoveredTraces + f;
+				for (String eventKey : t.getActivities()) {				
+		            Integer value = activityFrequencyMap.get(eventKey);
+		            if (value==null)
+		            	value = new Integer(f);
+		            else 
+		            	value = value+f;
+		            activityFrequencyMap.put(eventKey, value);
+
+				}
 			}
 		}
+		settings.setActivityFrequencyMap(activityFrequencyMap);
 	}
 	
 

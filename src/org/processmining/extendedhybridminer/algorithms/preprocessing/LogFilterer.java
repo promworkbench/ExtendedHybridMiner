@@ -18,7 +18,7 @@ public class LogFilterer {
     //Filtering by activity frequency
 	public static XLog filterLogByActivityFrequency(XLog log, XLogInfo logInfo, HybridCGMinerSettings settings){
 		
-		Map<String, Integer> activityFrequencyMap = new HashMap<String, Integer>();
+		Map<String, Integer> localActivityFrequencyMap = new HashMap<String, Integer>();
 		// int logEventOccurrences = log.size();
 		for (XTrace trace : log) {
 			Set<String> traceEvents = new HashSet<String>();
@@ -27,17 +27,17 @@ public class LogFilterer {
 	            traceEvents.add(eventKey);
 	        }
 	        for (String eventKey : traceEvents) {				
-	            Integer value = activityFrequencyMap.get(eventKey);
+	            Integer value = localActivityFrequencyMap.get(eventKey);
 	            if (value==null)
 	            	value = new Integer(1);
 	            else 
 	            	value = value+1;
-	            activityFrequencyMap.put(eventKey, value);
+	            localActivityFrequencyMap.put(eventKey, value);
 
 			}
 		}
 		// add the activityFrequencyMap to the settings
-		settings.setActivityFrequencyMap(activityFrequencyMap);
+		//settings.setActivityFrequencyMap(activityFrequencyMap);
 		/*int maxEvOccurrence = computeMax(activityFrequencyMap);
 		System.out.println("*****************************************");
 		System.out.println("MAX NUMBER OF OCCURRENCES "+maxEvOccurrence);
@@ -56,11 +56,11 @@ public class LogFilterer {
 	        	/*if((activityFrequencyMap.get(eventKey)/((double)logEventOccurrences))>=settings.getPositiveObservationDegreeThreshold()){
 	        		filteredTrace.add(event);
 	        	}*/
-	        	if((activityFrequencyMap.get(eventKey)) >= minFreq){
+	        	if((localActivityFrequencyMap.get(eventKey)) >= minFreq){
 	        		filteredTrace.add(event);
-	        	} else {
+	        	}/* else {
 	        		activityFrequencyMap.put(eventKey, 0);
-	        	}
+	        	}*/
 	        }
 	        if (filteredTrace.size()>0) {
 	        	filteredLog.add(filteredTrace);

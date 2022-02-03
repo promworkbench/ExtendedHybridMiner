@@ -5,32 +5,24 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
 
 import org.processmining.framework.util.ui.scalableview.VerticalLabelUI;
-import org.processmining.plugins.heuristicsnet.miner.heuristics.miner.operators.Operator;
-import org.processmining.plugins.heuristicsnet.miner.heuristics.miner.operators.Split;
-import org.processmining.plugins.heuristicsnet.miner.heuristics.miner.operators.Stats;
-import org.processmining.plugins.heuristicsnet.visualizer.annotatedvisualization.AnnotatedVisualizationSettings;
+//import org.processmining.plugins.heuristicsnet.miner.heuristics.miner.operators.Operator;
+//import org.processmining.plugins.heuristicsnet.miner.heuristics.miner.operators.Split;
+//import org.processmining.plugins.heuristicsnet.miner.heuristics.miner.operators.Stats;
+//import org.processmining.plugins.heuristicsnet.visualizer.annotatedvisualization.AnnotatedVisualizationSettings;
 
 import com.fluxicon.slickerbox.factory.SlickerDecorator;
 import com.fluxicon.slickerbox.factory.SlickerFactory;
@@ -675,11 +667,8 @@ class FilterPanel extends JPanel {
 }
 
 
-class AnnotationsPanel extends JPanel {
+/*class AnnotationsPanel extends JPanel {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 6615860311124501461L;
 
 	private String opID;
@@ -1063,7 +1052,7 @@ class AnnotationsPanel extends JPanel {
 			return id.substring(0, index) + " (" + id.substring(index + 1) + ")";
 		}
 	}
-}
+}*/
 
 // class OptionsPanel extends JPanel {
 //	
@@ -1079,7 +1068,7 @@ class AnnotationsPanel extends JPanel {
 // }
 // }
 
-class SetupPanel extends JPanel {
+/*class SetupPanel extends JPanel {
 
 
 	private static final long serialVersionUID = 8408305033071764421L;
@@ -1266,7 +1255,7 @@ class SetupPanel extends JPanel {
 	public boolean hasChanged() {
 		return this.hasChanged;
 	}
-}
+}*/
 
 class VerticalTableHeaderCellRenderer extends
 		javax.swing.table.DefaultTableCellRenderer {

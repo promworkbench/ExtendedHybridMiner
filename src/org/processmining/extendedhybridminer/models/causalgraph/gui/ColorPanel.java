@@ -15,7 +15,7 @@ import javax.swing.SwingConstants;
 
 import org.jfree.ui.action.ActionButton;
 import org.processmining.extendedhybridminer.models.causalgraph.ExtendedCausalGraph;
-import org.processmining.extendedhybridminer.models.hybridpetrinet.HybridPetrinet;
+import org.processmining.extendedhybridminer.models.hybridpetrinet.ExtendedHybridPetrinet;
 import org.processmining.framework.util.ui.scalableview.ScalableComponent;
 import org.processmining.framework.util.ui.scalableview.ScalableViewPanel;
 import org.processmining.framework.util.ui.scalableview.interaction.ViewInteractionPanel;
@@ -92,7 +92,7 @@ public class ColorPanel extends JPanel implements ViewInteractionPanel {
 	}
 	
 	
-	public ColorPanel(HybridPetrinetVisualization panel, HybridPetrinet pn) {
+	public ColorPanel(HybridPetrinetVisualization panel, ExtendedHybridPetrinet pn) {
 		//this.panel = panel;
 		this.width = 200;
 		this.height = 125;

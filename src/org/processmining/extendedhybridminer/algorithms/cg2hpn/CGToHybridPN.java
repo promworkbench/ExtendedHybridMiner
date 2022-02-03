@@ -14,7 +14,7 @@ import org.processmining.extendedhybridminer.models.causalgraph.HybridDirectedGr
 import org.processmining.extendedhybridminer.models.causalgraph.HybridDirectedGraphNode;
 import org.processmining.extendedhybridminer.models.hybridpetrinet.Cluster;
 import org.processmining.extendedhybridminer.models.hybridpetrinet.FitnessType;
-import org.processmining.extendedhybridminer.models.hybridpetrinet.HybridPetrinet;
+import org.processmining.extendedhybridminer.models.hybridpetrinet.ExtendedHybridPetrinet;
 import org.processmining.extendedhybridminer.models.hybridpetrinet.PlaceEvaluation;
 import org.processmining.extendedhybridminer.models.hybridpetrinet.candidateplaceiterator.CandidatePlaceIteratorEnum;
 import org.processmining.extendedhybridminer.models.hybridpetrinet.candidateplacestrategy.BoundedInputANDOutput;
@@ -42,9 +42,9 @@ public class CGToHybridPN {
 	private static TraceVariantsLog variants;
 	private static int thresholdStopIt;
 	
-    public static <N extends AbstractDirectedGraphNode> HybridPetrinet fuzzyCGToFuzzyPN(ExtendedCausalGraph graph, HybridPNMinerSettings pNSettings) {
+    public static <N extends AbstractDirectedGraphNode> ExtendedHybridPetrinet fuzzyCGToFuzzyPN(ExtendedCausalGraph graph, HybridPNMinerSettings pNSettings) {
 		long totalStartTime = System.currentTimeMillis();
-		HybridPetrinet result = new HybridPetrinet("minedHybridPetrinet");
+		ExtendedHybridPetrinet result = new ExtendedHybridPetrinet("minedHybridPetrinet");
 		result.setColors(graph.getSureColor(), graph.getUnsureColor(), graph.getLongDepColor());
         // We consider only sure edges!
 		LinkedHashSet<HybridDirectedGraphEdge> edges = graph.getSureGraphEdges();
@@ -415,7 +415,7 @@ public class CGToHybridPN {
 
 
 
-	public static HybridPetrinet addStartAndEndPlaces(HybridPetrinet fPN){
+	public static ExtendedHybridPetrinet addStartAndEndPlaces(ExtendedHybridPetrinet fPN){
 		Place startPlace = fPN.addPlace("start");
 	    //iMarking = new Marking();
 		//iMarking.add(startPlace);

@@ -28,11 +28,11 @@ import org.processmining.framework.plugin.impl.ProgressBarImpl;
 import org.processmining.models.connections.GraphLayoutConnection;
 import org.processmining.models.graphbased.AttributeMap;
 import org.processmining.models.graphbased.ViewSpecificAttributeMap;
-import org.processmining.models.heuristics.HeuristicsNet;
+//import org.processmining.models.heuristics.HeuristicsNet;
 import org.processmining.models.jgraph.ProMGraphModel;
 import org.processmining.models.jgraph.ProMJGraph;
 import org.processmining.models.jgraph.elements.ProMGraphPort;
-import org.processmining.plugins.heuristicsnet.visualizer.annotatedvisualization.AnnotatedVisualizationSettings;
+//import org.processmining.plugins.heuristicsnet.visualizer.annotatedvisualization.AnnotatedVisualizationSettings;
 
 import com.jgraph.layout.JGraphFacade;
 import com.jgraph.layout.JGraphLayoutProgress;
@@ -416,13 +416,13 @@ public class HybridCausalGraphVisualizer {
 		}
 	}
 
-	public static JComponent visualizeGraph(
+	/*public static JComponent visualizeGraph(
 			ExtendedCausalGraph graph, 
 			HeuristicsNet net, 
 			AnnotatedVisualizationSettings settings, 
 			Progress progress) {
 		
 		return getResultsPanel(graph, new ViewSpecificAttributeMap(), progress);
-	}
+	}*/
 }
 

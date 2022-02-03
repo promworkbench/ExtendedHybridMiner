@@ -91,17 +91,27 @@ public class HybridCGMiner {
         this.traceVariants = variants;
         this.longDepThreshold = settings.getLongDepThreshold();
         this.settings = settings;
-        this.activityMap = new HashMap<Integer, String>();
-        int i = 0;
-        for (String activity: settings.getActivityFrequencyMap().keySet()) {
-        	if (settings.getActivityFrequencyMap().get(activity) > 0) {
-        		this.activityMap.put(i, activity);
-        	    i++;
-        	}
-        	
-        }
-        this.eventsNumber = i;
+
         		//logInfo.getEventClasses().size();
+    }
+
+	public ExtendedCausalGraph mineFCG(){
+		fCG = new ExtendedCausalGraph();
+		this.updateCG(fCG);
+		return fCG;
+	}
+	
+	private void setKeys() {
+		this.activityMap = new HashMap<Integer, String>();
+        int n = 0;
+        for (String activity: settings.getActivityFrequencyMap().keySet()) {
+        	//if (settings.getActivityFrequencyMap().get(activity) > 0) {
+            this.activityMap.put(n, activity);
+        	n++;
+        	//}	
+        }
+        this.eventsNumber = n;
+        
         this.activityTraceCount = new ArrayList<Integer>();
         this.directSuccessionCount = DoubleFactory2D.sparse.make(eventsNumber, eventsNumber, 0);
         this.eventuallyFollows = DoubleFactory2D.sparse.make(eventsNumber, eventsNumber, 0);
@@ -126,18 +136,10 @@ public class HybridCGMiner {
 		//this.outgoing = new HashMap<Integer, Set<Integer>>();
 		//this.activeComputationODS = BooleanMatrix2D.factory.zeros(eventsNumber, eventsNumber);
 		//this.activeComputationIDS = BooleanMatrix2D.factory.zeros(eventsNumber, eventsNumber);
-    }
 
-	public ExtendedCausalGraph mineFCG(){
-		fCG = new ExtendedCausalGraph();
-		this.updateCG(fCG);
-		return fCG;
-	}
-	
-	private void setKeys() {
+        
 		this.keys = new HashMap<String, Integer>();
 		HashMap<Integer, String> map = this.activityMap;
-		//int j = 0;
 		for(int i=0; i< map.size(); i++) {
 			this.activityTraceCount.add(0);
 			String label = map.get(i);

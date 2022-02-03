@@ -32,13 +32,12 @@ import org.processmining.models.semantics.petrinet.Marking;
 import org.processmining.plugins.pnml.base.FullPnmlElementFactory;
 import org.processmining.plugins.pnml.base.Pnml;
 import org.processmining.plugins.pnml.base.Pnml.PnmlType;
-import org.processmining.plugins.pnml.base.PnmlElementFactory;
 import org.processmining.plugins.pnml.importing.PnmlImportUtils;
 
 /**
  * Created by demas on 27/07/16.
  */
-public class HybridPetrinet extends PetrinetImpl {
+public class ExtendedHybridPetrinet extends PetrinetImpl {
     private Map<String, Transition> labelTransitionsMap;
 	private Color surePlaceColor;
 	private Color sureColor;
@@ -48,7 +47,7 @@ public class HybridPetrinet extends PetrinetImpl {
 	private Collection<Marking> finalMarkings;
 	
 
-    public HybridPetrinet(String label) {
+    public ExtendedHybridPetrinet(String label) {
         super(label);
         this.labelTransitionsMap = new HashMap<>();
         this.initialMarking = null;
@@ -152,7 +151,7 @@ public class HybridPetrinet extends PetrinetImpl {
     }
     
     
-    public synchronized TransitionsArc addTransitionsArcFromFCGEdge(HybridDirectedGraphEdge edge) {
+    public synchronized Edge addTransitionsArcFromFCGEdge(HybridDirectedGraphEdge edge) {
         Transition source = this.addTransition(edge.getSource().getLabel());
         Transition target = this.addTransition(edge.getTarget().getLabel());
 
@@ -164,7 +163,7 @@ public class HybridPetrinet extends PetrinetImpl {
         	return this.addLongDepTransitionsArcPrivate(source, target, 1);
     }
 
-    public synchronized TransitionsArc addTransitionsArcFromFCGEdge(HybridDirectedGraphEdge edge, int weight) {
+    public synchronized Edge addTransitionsArcFromFCGEdge(HybridDirectedGraphEdge edge, int weight) {
         Transition source = this.addTransition(edge.getSource().getLabel());
         Transition target = this.addTransition(edge.getTarget().getLabel());
 
@@ -187,7 +186,7 @@ public class HybridPetrinet extends PetrinetImpl {
      * @return the SureTransitionArc if not present or if already present with a different weight. Null if there is already a place
      * connecting source and target.
      */
-    public synchronized SureTransitionsArc addSureTransitionsArcPrivate(Transition source, Transition target, int weight) {
+    public synchronized SureEdge addSureTransitionsArcPrivate(Transition source, Transition target, int weight) {
         synchronized (arcs) {
             // Following check just makes sure that source and target already exist in the net
             checkAddEdge(source, target);
@@ -195,7 +194,7 @@ public class HybridPetrinet extends PetrinetImpl {
             // Check if there is already a place connecting source and target. If there is, return null
             boolean placesAlreadyAdded = this.checkIfPlacesArePresent(source, target);
             if (!placesAlreadyAdded) {
-                SureTransitionsArc a = new SureTransitionsArc(source, target, weight);
+                SureEdge a = new SureEdge(source, target, weight);
 
                 if (arcs.add(a)) {
                     graphElementAdded(a);
@@ -204,7 +203,7 @@ public class HybridPetrinet extends PetrinetImpl {
                     for (Arc existing : arcs) {
                         if (existing.equals(a)) {
                             existing.setWeight(existing.getWeight() + weight);
-                            return (SureTransitionsArc) existing;
+                            return (SureEdge) existing;
                         }
                     }
                 }
@@ -215,7 +214,7 @@ public class HybridPetrinet extends PetrinetImpl {
         }
     }
     
-    public synchronized LongDepTransitionsArc addLongDepTransitionsArcPrivate(Transition source, Transition target, int weight) {
+    public synchronized LongDepEdge addLongDepTransitionsArcPrivate(Transition source, Transition target, int weight) {
         synchronized (arcs) {
             // Following check just makes sure that source and target already exist in the net
             checkAddEdge(source, target);
@@ -223,7 +222,7 @@ public class HybridPetrinet extends PetrinetImpl {
             // Check if there is already a place connecting source and target. If there is, return null
             boolean placesAlreadyAdded = this.checkIfPlacesArePresent(source, target);
             if (!placesAlreadyAdded) {
-                LongDepTransitionsArc a = new LongDepTransitionsArc(source, target, weight);
+                LongDepEdge a = new LongDepEdge(source, target, weight);
 
                 if (arcs.add(a)) {
                     graphElementAdded(a);
@@ -232,7 +231,7 @@ public class HybridPetrinet extends PetrinetImpl {
                     for (Arc existing : arcs) {
                         if (existing.equals(a)) {
                             existing.setWeight(existing.getWeight() + weight);
-                            return (LongDepTransitionsArc) existing;
+                            return (LongDepEdge) existing;
                         }
                     }
                 }
@@ -256,7 +255,7 @@ public class HybridPetrinet extends PetrinetImpl {
      * @return the uncertainTransitionArc if not present or if already present with a different weight. Null if there is already a place
      * connecting source and target.
      */
-    private synchronized UncertainTransitionsArc addUncertainTransitionsArcPrivate(Transition source, Transition target, int weight) {
+    private synchronized UncertainEdge addUncertainTransitionsArcPrivate(Transition source, Transition target, int weight) {
         synchronized (arcs) {
             // Following check just makes sure that source and target already exist in the net
             checkAddEdge(source, target);
@@ -264,7 +263,7 @@ public class HybridPetrinet extends PetrinetImpl {
             // Check if there is already a place connecting source and target. If there is, return null
             boolean placesAlreadyAdded = this.checkIfPlacesArePresent(source, target);
             if (!placesAlreadyAdded) {
-                UncertainTransitionsArc a = new UncertainTransitionsArc(source, target, weight);
+                UncertainEdge a = new UncertainEdge(source, target, weight);
                 if (arcs.add(a)) {
                     graphElementAdded(a);
                     return a;
@@ -272,7 +271,7 @@ public class HybridPetrinet extends PetrinetImpl {
                     for (Arc existing : arcs) {
                         if (existing.equals(a)) {
                             existing.setWeight(existing.getWeight() + weight);
-                            return (UncertainTransitionsArc) existing;
+                            return (UncertainEdge) existing;
                         }
                     }
                 }
@@ -408,11 +407,11 @@ public class HybridPetrinet extends PetrinetImpl {
      * Returns the set of sure arcs
      * @return set of sure arcs
      */
-    public synchronized Collection<SureTransitionsArc> getSureArcs(){
-    	Set<SureTransitionsArc> directedSureGraphEdges = new HashSet<SureTransitionsArc>();
+    public synchronized Collection<SureEdge> getSureArcs(){
+    	Set<SureEdge> directedSureGraphEdges = new HashSet<SureEdge>();
     	for (PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> edge : getEdges()) {
-            if (edge instanceof SureTransitionsArc)
-            	directedSureGraphEdges.add((SureTransitionsArc) edge);
+            if (edge instanceof SureEdge)
+            	directedSureGraphEdges.add((SureEdge) edge);
 		}
     	return directedSureGraphEdges;
     }
@@ -421,11 +420,11 @@ public class HybridPetrinet extends PetrinetImpl {
      * Returns the set of uncertain arcs
      * @return set of uncertain arcs
      */
-    public synchronized Collection<UncertainTransitionsArc> getUncertainArcs(){
-    	Set<UncertainTransitionsArc> directedUncertainGraphEdges = new HashSet<UncertainTransitionsArc>();
+    public synchronized Collection<UncertainEdge> getUncertainArcs(){
+    	Set<UncertainEdge> directedUncertainGraphEdges = new HashSet<UncertainEdge>();
     	for (PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> edge : getEdges()) {
-            if (edge instanceof UncertainTransitionsArc)
-            	directedUncertainGraphEdges.add((UncertainTransitionsArc) edge);
+            if (edge instanceof UncertainEdge)
+            	directedUncertainGraphEdges.add((UncertainEdge) edge);
 		}
     	return directedUncertainGraphEdges;
     }
@@ -447,6 +446,10 @@ public class HybridPetrinet extends PetrinetImpl {
         return addSureTransitionsArcPrivate(s, t, 1);
     }
     
+    public synchronized Arc addLongDepArc(Transition s, Transition t) {
+        return addLongDepTransitionsArcPrivate(s, t, 1);
+    }
+    
     public synchronized Arc addUnsureArc(Transition s, Transition t) {
         return addUncertainTransitionsArcPrivate(s, t, 1);
     }
@@ -459,9 +462,9 @@ public class HybridPetrinet extends PetrinetImpl {
     public String toString() {
     	String fuzzyPetriNetString = "*** FUZZY PETRI NET "+this.getLabel()+" *** \n";
     	for (PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> edge : getEdges()) {
-    		if (edge instanceof SureTransitionsArc)
+    		if (edge instanceof SureEdge)
     			fuzzyPetriNetString+=edge.getSource()+" ->- "+edge.getTarget()+"\n";
-            if (edge instanceof UncertainTransitionsArc)
+            if (edge instanceof UncertainEdge)
     			fuzzyPetriNetString+=edge.getSource()+" ->-? "+edge.getTarget()+"\n";
             else
                 fuzzyPetriNetString+=edge.getSource()+" -> "+edge.getTarget()+"\n";
@@ -474,8 +477,8 @@ public class HybridPetrinet extends PetrinetImpl {
 	/*
 	 * Added by Humam
 	 */
-	public HybridPetrinet cloneToPN() {
-		HybridPetrinet newPN = new HybridPetrinet("copy of + " + this.getLabel());
+	public ExtendedHybridPetrinet cloneToPN() {
+		ExtendedHybridPetrinet newPN = new ExtendedHybridPetrinet("copy of + " + this.getLabel());
 		for (Transition t: this.getTransitions()) {
 			String label = t.getLabel();
 			newPN.addTransition(label);
@@ -651,7 +654,7 @@ public class HybridPetrinet extends PetrinetImpl {
 			layout = new GraphLayoutConnection(this);
 		}
 
-		PnmlElementFactory factory = new FullPnmlElementFactory();
+		FullPnmlElementFactory factory = new FullPnmlElementFactory();
 		Pnml pnml = new Pnml();
 		synchronized (factory) {
 			pnml.setFactory(factory);

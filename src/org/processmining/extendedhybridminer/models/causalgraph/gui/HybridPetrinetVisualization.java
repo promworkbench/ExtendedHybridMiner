@@ -37,7 +37,7 @@ import javax.swing.event.ChangeListener;
 import org.jgraph.event.GraphSelectionEvent;
 import org.jgraph.event.GraphSelectionListener;
 import org.jgraph.graph.BasicMarqueeHandler;
-import org.processmining.extendedhybridminer.models.hybridpetrinet.HybridPetrinet;
+import org.processmining.extendedhybridminer.models.hybridpetrinet.ExtendedHybridPetrinet;
 import org.processmining.framework.plugin.impl.ProgressBarImpl;
 import org.processmining.framework.util.Cleanable;
 import org.processmining.framework.util.Pair;
@@ -105,7 +105,7 @@ UpdateListener, HybridGraphVisualization {
 	private ContextMenuCreator creator = null;
 	//private ColorPanel surePlaceColorPanel;
 	//private JPanel surePlaceColorPanel, sureColorPanel, unsureColorPanel;
-	private HybridPetrinet hPN;
+	private ExtendedHybridPetrinet hPN;
 	private PIPInteractionPanel pip;
 	private ZoomInteractionPanel zoomIP;
 	private ExportInteractionPanel export;
@@ -127,7 +127,7 @@ UpdateListener, HybridGraphVisualization {
 	}
 	
 	
-	public HybridPetrinetVisualization(final ProMJGraph jgraph, HybridPetrinet hPN) {
+	public HybridPetrinetVisualization(final ProMJGraph jgraph, ExtendedHybridPetrinet hPN) {
 		// TODO Auto-generated constructor stub
 		this.scalable = jgraph;
 		this.component = jgraph.getComponent();
