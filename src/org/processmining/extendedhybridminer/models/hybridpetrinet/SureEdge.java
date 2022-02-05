@@ -9,6 +9,7 @@ public class SureEdge extends Edge {
 
     public SureEdge(Transition source, Transition target, int weight) {
         super(source, target, weight);
+        getAttributeMap().put("edgeType", "sure");
     }
 
     public SureEdge(Transition source, Transition target) {

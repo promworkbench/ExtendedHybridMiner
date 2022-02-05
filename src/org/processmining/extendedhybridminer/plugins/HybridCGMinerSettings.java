@@ -19,8 +19,8 @@ public class HybridCGMinerSettings {
     private double causalityWeight;
     private static double POSITIVEOBSERVATIONDEGREE = 0;
     private static double TRACEVARIANTSTHRESHOLD = 0;
-    private static double SURETHRESHOLD = 0.4;
-    private static double QUESTIONMARKTHRESHOLD = 0.2;
+    private static double SURETHRESHOLD = 0.5;
+    private static double QUESTIONMARKTHRESHOLD = 0.3;
     private static double LONGDEPTHRESHOLD = 0.8;
     private static double CAUSALITYWEIGHT = 0.5;
     private static double DEPENDENCYPARAMETER = 1;

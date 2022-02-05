@@ -1,13 +1,6 @@
 package org.processmining.extendedhybridminer.models.hybridpetrinet;
 
 import java.awt.Color;
-import java.awt.geom.Point2D;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -18,9 +11,6 @@ import java.util.Set;
 import org.processmining.extendedhybridminer.models.causalgraph.HybridDirectedGraphEdge;
 import org.processmining.extendedhybridminer.models.causalgraph.HybridDirectedSureGraphEdge;
 import org.processmining.extendedhybridminer.models.causalgraph.HybridDirectedUncertainGraphEdge;
-import org.processmining.framework.connections.ConnectionCannotBeObtained;
-import org.processmining.framework.plugin.PluginContext;
-import org.processmining.models.connections.GraphLayoutConnection;
 import org.processmining.models.graphbased.directed.AbstractDirectedGraphNode;
 import org.processmining.models.graphbased.directed.petrinet.PetrinetEdge;
 import org.processmining.models.graphbased.directed.petrinet.PetrinetNode;
@@ -29,29 +19,25 @@ import org.processmining.models.graphbased.directed.petrinet.elements.Place;
 import org.processmining.models.graphbased.directed.petrinet.elements.Transition;
 import org.processmining.models.graphbased.directed.petrinet.impl.PetrinetImpl;
 import org.processmining.models.semantics.petrinet.Marking;
-import org.processmining.plugins.pnml.base.FullPnmlElementFactory;
-import org.processmining.plugins.pnml.base.Pnml;
-import org.processmining.plugins.pnml.base.Pnml.PnmlType;
-import org.processmining.plugins.pnml.importing.PnmlImportUtils;
 
 /**
  * Created by demas on 27/07/16.
  */
 public class ExtendedHybridPetrinet extends PetrinetImpl {
-    private Map<String, Transition> labelTransitionsMap;
-	private Color surePlaceColor;
-	private Color sureColor;
-	private Color unsureColor;
-	private Color LDColor;
-	private Marking initialMarking;
-	private Collection<Marking> finalMarkings;
+    protected Map<String, Transition> labelTransitionsMap;
+    protected Color surePlaceColor;
+    protected Color sureColor;
+    protected Color unsureColor;
+    protected Color LDColor;
+	public Marking initialMarking;
+	public Collection<Marking> finalMarkings;
 	
 
     public ExtendedHybridPetrinet(String label) {
         super(label);
         this.labelTransitionsMap = new HashMap<>();
-        this.initialMarking = null;
-        this.finalMarkings = null;
+        this.initialMarking = new Marking();
+		this.finalMarkings = new ArrayList<Marking>();
     }
      
     public void setColors() {
@@ -538,93 +524,9 @@ public class ExtendedHybridPetrinet extends PetrinetImpl {
 		this.finalMarkings.add(finalMarking);
 		return this.finalMarkings;
 	}
+	
+	
 
-	public void importFromStream(PluginContext context, InputStream input) throws Exception {
-		PnmlImportUtils utils = new PnmlImportUtils();
-		Set<Point2D> positions = new HashSet<Point2D>();
-		Pnml pnml = utils.importPnmlFromStream(context, input, "", 0);
-		setColors();
-		if (pnml == null) {
-			return;
-		}
-		/*if (pnml.hasModule()) {
-			OpenNet openNet = new OpenNet(pnml.getLabel());
-			Marking openInitialMarking = new Marking();
-			GraphLayoutConnection openLayout = new GraphLayoutConnection(openNet);
-			pnml.convertToNet(openNet, openInitialMarking, openLayout);
-			System.out.println("openNet: " + openNet.getNodes().toString());
-			//HybridPetrinet net = new HybridPetrinet(pnml.getLabel());
-			GraphLayoutConnection layout = new GraphLayoutConnection(this);
-			layout.setLabel(openLayout.getLabel());
-			layout.setLayedOut(openLayout.isLayedOut());
-			Map<Transition, Transition> transitionMap = new HashMap<Transition, Transition>();
-			Map<Place, Place> placeMap = new HashMap<Place, Place>();
-			for (Transition openTransition : openNet.getTransitions()) {
-				Transition transition = addTransition(openTransition.getLabel());
-				transitionMap.put(openTransition, transition);
-				transition.setInvisible(openTransition.isInvisible());
-				if (openLayout.isLayedOut()) {
-					layout.setPosition(transition, openLayout.getPosition(openTransition));
-					positions.add(openLayout.getPosition(openTransition));
-					layout.setSize(transition, openLayout.getSize(openTransition));
-				}
-			}
-			for (Place openPlace : openNet.getPlaces()) {
-				Place place = addPlace(openPlace.getLabel());
-				placeMap.put(openPlace, place);
-				if (openLayout.isLayedOut()) {
-					layout.setPosition(place, openLayout.getPosition(openPlace));
-					positions.add(openLayout.getPosition(openPlace));
-					layout.setSize(place, openLayout.getSize(openPlace));
-				}
-			}
-			if (positions.size() < getTransitions().size() + getPlaces().size()) {
-				layout.setLayedOut(false);
-			}
-			for (PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> openEdge : openNet.getEdges()) {
-				PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> edge = null;
-				if (placeMap.containsKey(openEdge.getSource())) {
-					addArc(placeMap.get(openEdge.getSource()), transitionMap.get(openEdge.getTarget()));
-				} else if (placeMap.containsKey(openEdge.getTarget())) {
-					addArc(transitionMap.get(openEdge.getSource()), placeMap.get(openEdge.getTarget()));
-				} else {
-					addArc(transitionMap.get(openEdge.getSource()), transitionMap.get(openEdge.getTarget()))	;	
-
-					if (openLayout.isLayedOut()) {
-						layout.setEdgePoints(edge, openLayout.getEdgePoints(openEdge));
-					}
-				}
-				context.addConnection(layout);
-				init();
-				initialMarking = new Marking();
-				for (Place place : openInitialMarking.baseSet()) {
-					initialMarking.add(placeMap.get(place), openInitialMarking.occurrences(place));
-				}
-				context.addConnection(new InitialMarkingConnection(this, initialMarking));
-				finalMarkings.clear();
-				for (Marking openFinalMarking : openNet.getFinalMarkings()) {
-					Marking finalMarking = new Marking();
-					for (Place place : openFinalMarking.baseSet()) {
-						finalMarking.add(placeMap.get(place), openFinalMarking.occurrences(place));
-					}
-					finalMarkings.add(finalMarking);
-				}
-			}
-		} else {*/
-			//	System.out.println("USED");
-			//net = PetrinetFactory.newPetrinet(pnml.getLabel());
-			GraphLayoutConnection layout = new GraphLayoutConnection(this);
-			context.getConnectionManager().addConnection(layout);
-			initialMarking = new Marking();
-			finalMarkings = new HashSet<Marking>();
-			pnml.convertToNet(this, initialMarking, finalMarkings, layout);
-			if (finalMarkings.isEmpty()) {
-				finalMarkings.add(new Marking());
-			}
-		//}
-		System.out.println("this: " + this.getNodes().toString());
-
-	}
 	
 	public void init() {
 		//this.net = net;
@@ -644,32 +546,7 @@ public class ExtendedHybridPetrinet extends PetrinetImpl {
 			finalMarkings.add(new Marking());
 		}
 	}
-
-	public void exportToFile(PluginContext context, File file) throws IOException {
-		GraphLayoutConnection layout;
-		try {
-			layout = context.getConnectionManager().getFirstConnection(GraphLayoutConnection.class,
-					context, this);
-		} catch (ConnectionCannotBeObtained e) {
-			layout = new GraphLayoutConnection(this);
-		}
-
-		FullPnmlElementFactory factory = new FullPnmlElementFactory();
-		Pnml pnml = new Pnml();
-		synchronized (factory) {
-			pnml.setFactory(factory);
-			pnml = new Pnml().convertFromNet(this, setInitialMarking(), setFinalMarkings(), layout);
-			pnml.setType(PnmlType.PNML);
-		}
-		String text = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" + pnml.exportElement(pnml);
-
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
-		bw.write(text);
-		bw.close();
-
-	}
-
-
+	
 	public Color getLDColor() {
 		return this.LDColor;
 	}

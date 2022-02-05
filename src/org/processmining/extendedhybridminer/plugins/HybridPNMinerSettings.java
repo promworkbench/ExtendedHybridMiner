@@ -8,7 +8,6 @@ import org.processmining.extendedhybridminer.models.hybridpetrinet.conflictstrat
 
 public class HybridPNMinerSettings {
 
-
     private double prePlaceEvaluationThreshold;
     private double placeEvalThreshold;
     private static double PREPLACEEVALUATIONTHRESHOLD = 0.0;
@@ -78,8 +77,6 @@ public class HybridPNMinerSettings {
         this.prePlaceEvaluationThreshold = prePlaceEvalThreshold;
         this.placeEvalThreshold = placeEvalThreshold;
         this.fitnessType = fitness;
-        
-
     }
 
     public void setMaxPlaceNumber(int m)
@@ -195,10 +192,7 @@ public class HybridPNMinerSettings {
 
         if (Double.compare(that.getPrePlaceEvaluationThreshold(), prePlaceEvaluationThreshold) != 0) return false;       
         if (Double.compare(that.getPlaceEvalThreshold(), placeEvalThreshold) != 0) return false;
-        //return (Boolean.compare(that.isMaxClusterSizeEnabled(), maxClusterSizeEnabled) == 0);
-        return true;
-
-        
+         return true;    
     }
 
     @Override
@@ -214,15 +208,13 @@ public class HybridPNMinerSettings {
     }
 
 	public int getThresholdEarlyCancelationIterator() {
-		// TODO Auto-generated method stub
 		return this.thresholdEarlyCancelationIterator; 
 	}
 	
 	public void setThresholdEarlyCancelationIterator(int i) {
-		// TODO Auto-generated method stub
 		this.thresholdEarlyCancelationIterator = i; 
 	}
-    
+   
 }
 
 

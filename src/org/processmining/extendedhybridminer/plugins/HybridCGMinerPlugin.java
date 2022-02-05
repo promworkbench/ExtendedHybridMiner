@@ -13,10 +13,11 @@ import org.processmining.extendedhybridminer.dialogs.CGDialog;
 import org.processmining.extendedhybridminer.models.causalgraph.ExtendedCausalGraph;
 import org.processmining.framework.plugin.PluginContext;
 import org.processmining.framework.plugin.annotations.Plugin;
+import org.processmining.framework.plugin.annotations.PluginCategory;
 import org.processmining.framework.plugin.annotations.PluginVariant;
 
 @Plugin(name = "Extended Causal Graph Miner", parameterLabels = {"log", "Hybrid Causal Graph Configuration" }, 
-	    returnLabels = {"Causal Graph"}, returnTypes = {ExtendedCausalGraph.class})
+	    returnLabels = {"Causal Graph"}, returnTypes = {ExtendedCausalGraph.class}, categories = PluginCategory.Discovery)
 public class HybridCGMinerPlugin {
 	
 	private ExtendedCausalGraph privateFCGMinerPlugin(PluginContext context, XLog log, HybridCGMinerSettings settings) {
@@ -29,29 +30,15 @@ public class HybridCGMinerPlugin {
 		return fCG;
 	}
 	
-	/**
-	 * The plug-in variant that runs in any context and requires a configuration.
-	 */ 
-	@UITopiaVariant(affiliation = "FBK", author = "H. De Masellis et al.", email = "r.demasellis|dfmchiara@fbk.eu")
-	@PluginVariant(variantLabel = "HybridCGMiner, parameters", requiredParameterLabels = { 0, 1})
-	public ExtendedCausalGraph configuredFPNMinerPlugin(PluginContext context, XLog log, HybridCGMinerSettings settings) {		
-		return privateFCGMinerPlugin(context, log, settings);		
-	}
 	
-	/**
-	 * The plug-in variant that runs in any context and uses the default configuration.
-	 */
-	@UITopiaVariant(affiliation = "FBK", author = "R. De Masellis et al.", email = "r.demasellis|dfmchiara@fbk.eu")
+	@UITopiaVariant(affiliation = "RWTH, FBK", author = "H. Kourani et al.", email = "humam.kourani@rwth-aachen.de, r.demasellis|dfmchiara@fbk.eu")
 	@PluginVariant(variantLabel = "HybridCGMiner, parameters", requiredParameterLabels = { 0 })
 	public ExtendedCausalGraph defaultFCGMinerPlugin(PluginContext context, XLog log) {		
 		HybridCGMinerSettings settings = new HybridCGMinerSettings();
 	    return privateFCGMinerPlugin(context, log, settings);
 	}
 	
-	/**
-	 * The plug-in variant that runs in a UI context and uses a dialog to get the configuration.
-	 */
-	@UITopiaVariant(affiliation = "FBK", author = "R. De Masellis et al.", email = "r.demasellis|dfmchiara@fbk.eu")
+	@UITopiaVariant(affiliation = "RWTH, FBK", author = "H. Kourani et al.", email = "humam.kourani@rwth-aachen.de, r.demasellis|dfmchiara@fbk.eu")
 	@PluginVariant(variantLabel = "HybridCGMiner, dialog", requiredParameterLabels = { 0 })
 	public ExtendedCausalGraph dialogFPNMinerPlugin(UIPluginContext context, XLog log) {		
 	    HybridCGMinerSettings settings = new HybridCGMinerSettings();
@@ -62,4 +49,5 @@ public class HybridCGMinerPlugin {
 	    }
 	    return null;
 	}	
+	
 }

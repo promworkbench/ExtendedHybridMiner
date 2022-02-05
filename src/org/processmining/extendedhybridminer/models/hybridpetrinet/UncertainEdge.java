@@ -9,6 +9,7 @@ public class UncertainEdge extends Edge {
 
     public UncertainEdge(Transition source, Transition target, int weight) {
         super(source, target, weight);
+        getAttributeMap().put("edgeType", "uncertain");
 		//getAttributeMap().put(AttributeMap.LABEL, " ");
 		//getAttributeMap().put(AttributeMap.LABELALONGEDGE, true);
 		//getAttributeMap().put(AttributeMap.SHOWLABEL, true);
