@@ -15,11 +15,10 @@ import org.processmining.extendedhybridminer.plugins.HybridCGMinerSettings;
 
 public class LogFilterer {
 	
-    //Filtering by activity frequency
-	public static XLog filterLogByActivityFrequency(XLog log, XLogInfo logInfo, HybridCGMinerSettings settings){
+    public static XLog filterLogByActivityFrequency(XLog log, XLogInfo logInfo, HybridCGMinerSettings settings){
 		
 		Map<String, Integer> localActivityFrequencyMap = new HashMap<String, Integer>();
-		// int logEventOccurrences = log.size();
+		
 		for (XTrace trace : log) {
 			Set<String> traceEvents = new HashSet<String>();
 	        for (XEvent event : trace) {
@@ -36,12 +35,7 @@ public class LogFilterer {
 
 			}
 		}
-		// add the activityFrequencyMap to the settings
-		//settings.setActivityFrequencyMap(activityFrequencyMap);
-		/*int maxEvOccurrence = computeMax(activityFrequencyMap);
-		System.out.println("*****************************************");
-		System.out.println("MAX NUMBER OF OCCURRENCES "+maxEvOccurrence);
-		System.out.println("*****************************************");*/
+
 		int minFreq = (int) Math.ceil(settings.getFilterAcivityThreshold() * log.size());
 		if(minFreq == 0) {
 			return log;
@@ -53,14 +47,9 @@ public class LogFilterer {
 			filteredTrace.setAttributes(trace.getAttributes());
 	        for (XEvent event : trace) {
 	        	String eventKey = logInfo.getEventClasses(settings.getClassifier()).getClassOf(event).getId(); 
-	        	/*if((activityFrequencyMap.get(eventKey)/((double)logEventOccurrences))>=settings.getPositiveObservationDegreeThreshold()){
-	        		filteredTrace.add(event);
-	        	}*/
 	        	if((localActivityFrequencyMap.get(eventKey)) >= minFreq){
 	        		filteredTrace.add(event);
-	        	}/* else {
-	        		activityFrequencyMap.put(eventKey, 0);
-	        	}*/
+	        	}
 	        }
 	        if (filteredTrace.size()>0) {
 	        	filteredLog.add(filteredTrace);
@@ -70,18 +59,5 @@ public class LogFilterer {
 		filteredLog.setInfo(settings.getClassifier(), filteredLogInfo);
 		return filteredLog;
 	}
-
-	/*private static int computeMax(Map<String, Integer> activityFrequencyMap) {
-		int max = 0;
-		for (String eventKey : activityFrequencyMap.keySet()) {
-			if (activityFrequencyMap.get(eventKey)>max)
-				max = activityFrequencyMap.get(eventKey);
-		}
-		return max;
-	}*/
-	
-	
-
-	
 
 }

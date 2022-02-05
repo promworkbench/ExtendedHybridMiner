@@ -14,7 +14,7 @@ import org.deckfour.xes.model.XTrace;
 import org.processmining.extendedhybridminer.plugins.HybridCGMinerSettings;
 
 public class TraceVariantsLog {
-	//protected int size;
+
 	protected int originalLogSize;
 	ArrayList<TraceVariant> nonFilteredVariants;
 	protected ArrayList<TraceVariant> variants;
@@ -22,17 +22,15 @@ public class TraceVariantsLog {
 	protected int numberOfCoveredTraces;
 	
 	
-	
 	public TraceVariantsLog(XLog log, HybridCGMinerSettings settings, double freq) {
+		
 		this.originalLogSize = log.size();
 		this.numberOfCoveredTraces = 0;
 		this.variants = new ArrayList<TraceVariant>();
 		this.minimalFrequency = (int) Math.ceil(this.originalLogSize * freq);
-		//this.logName = XConceptExtension.instance().extractName(log);
-		//this.logInfo = XLogInfoFactory.createLogInfo(log, XLogInfoImpl.NAME_CLASSIFIER);
-		
 		Map<String, Integer> activityFrequencyMap = new HashMap<String, Integer>();
 		nonFilteredVariants = new ArrayList<TraceVariant>();
+		
 		outerloop:
 		for (XTrace trace : log) {
 			ArrayList<String> activities = new ArrayList<String>();
@@ -61,7 +59,6 @@ public class TraceVariantsLog {
 					continue outerloop;
 				}
 			}
-			
 			nonFilteredVariants.add(variant);
 		}
 		
@@ -83,6 +80,7 @@ public class TraceVariantsLog {
 				}
 			}
 		}
+		
 		settings.setActivityFrequencyMap(activityFrequencyMap);
 	}
 	
@@ -118,16 +116,6 @@ public class TraceVariantsLog {
 		}	
 	}
 
-
-	/*public String getLogName() {
-		return this.logName;
-	}*/
-
-
-	/*public XLogInfo getLogInfo() {
-		return this.logInfo;
-	}*/
-	
 
 	public ArrayList<TraceVariant> filterMostFrequent(double placeEvalThreshold) {
 		int nTracesToCover = (int) Math.ceil(this.numberOfCoveredTraces * placeEvalThreshold);

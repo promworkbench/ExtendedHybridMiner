@@ -5,12 +5,10 @@ import java.util.ArrayList;
 public class TraceVariant implements Comparable<TraceVariant> {
 
     private ArrayList<String> activities;
-    //private XTrace trace;
     private int frequency;
 
     public TraceVariant(ArrayList<String> activities){
         this.activities = activities;
-        // this.trace = trace;
         this.frequency = 1;
     }
     
@@ -34,8 +32,5 @@ public class TraceVariant implements Comparable<TraceVariant> {
     	return this.activities.equals(v.activities);
     }
 
-	/*public XTrace getTrace() {
-		return this.trace;
-	}*/
 }
 
