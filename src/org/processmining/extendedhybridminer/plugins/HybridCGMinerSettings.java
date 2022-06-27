@@ -141,4 +141,9 @@ public class HybridCGMinerSettings {
 		return this.activityThreshold;
 	}
 
+
+	public void setClassifier(XEventClassifier classifier2) {
+		this.classifier = classifier2;
+	}
+
 }

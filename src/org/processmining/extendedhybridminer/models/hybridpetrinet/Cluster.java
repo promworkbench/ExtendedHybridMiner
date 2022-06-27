@@ -99,7 +99,7 @@ public class Cluster<E extends HybridDirectedGraphEdge, N extends AbstractDirect
 	    //this.checkPresicion = false;
 	    this.fitnessType = fType;
 	    this.variants = variants2;
-	    this.logSize = hCG.getLog().size();
+	    this.logSize = variants2.getNumberOfCoveredTraces();
 	    
 	}
 

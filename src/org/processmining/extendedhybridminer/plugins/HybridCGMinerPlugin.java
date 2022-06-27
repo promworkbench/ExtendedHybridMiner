@@ -20,14 +20,14 @@ import org.processmining.framework.plugin.annotations.PluginVariant;
 	    returnLabels = {"Causal Graph"}, returnTypes = {ExtendedCausalGraph.class}, categories = PluginCategory.Discovery)
 public class HybridCGMinerPlugin {
 	
-	private ExtendedCausalGraph privateFCGMinerPlugin(PluginContext context, XLog log, HybridCGMinerSettings settings) {
+	public static ExtendedCausalGraph CGMinerPlugin(PluginContext context, XLog log, HybridCGMinerSettings settings) {
         XLogInfo logInfo = XLogInfoFactory.createLogInfo(log, settings.getClassifier());
 		XLog filteredLog = LogFilterer.filterLogByActivityFrequency(log, logInfo, settings);
 		TraceVariantsLog variants = new TraceVariantsLog(filteredLog, settings, settings.getTraceVariantsThreshold());
 		HybridCGMiner miner = new HybridCGMiner(filteredLog, filteredLog.getInfo(settings.getClassifier()), variants, settings);
-		ExtendedCausalGraph fCG = miner.mineFCG();
-		fCG.setUnfilteredLog(log);
-		return fCG;
+		ExtendedCausalGraph cg = miner.mineFCG();
+		cg.setUnfilteredLog(log);
+		return cg;
 	}
 	
 	
@@ -35,7 +35,7 @@ public class HybridCGMinerPlugin {
 	@PluginVariant(variantLabel = "HybridCGMiner, parameters", requiredParameterLabels = { 0 })
 	public ExtendedCausalGraph defaultFCGMinerPlugin(PluginContext context, XLog log) {		
 		HybridCGMinerSettings settings = new HybridCGMinerSettings();
-	    return privateFCGMinerPlugin(context, log, settings);
+	    return CGMinerPlugin(context, log, settings);
 	}
 	
 	@UITopiaVariant(affiliation = "RWTH, FBK", author = "H. Kourani et al.", email = "humam.kourani@rwth-aachen.de, r.demasellis|dfmchiara@fbk.eu")
@@ -45,7 +45,7 @@ public class HybridCGMinerPlugin {
 	    CGDialog dialog = new CGDialog(context, log, settings);
 	    InteractionResult result = context.showWizard("Extended Causal Graph Miner Settings", true, true, dialog);
 	    if (result == InteractionResult.FINISHED) {
-			return privateFCGMinerPlugin(context, log, settings);
+			return CGMinerPlugin(context, log, settings);
 	    }
 	    return null;
 	}	
