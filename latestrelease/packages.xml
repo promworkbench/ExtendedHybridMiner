@@ -1,0 +1,12 @@
+
+					<packages>
+						<package name="ExtendedHybridMiner" version="6.14.1" os="all" url="ExtendedHybridMiner/ExtendedHybridMiner-6.14.1-all.zip" desc="ExtendedHybridMiner" org="RWTH Aachen" license="GPL" author="Humam Kourani" auto="false" hasPlugins="true" logo="prom_subtitle_hat_300.png">
+				    	<dependency org="prom" name="ProM-Plugins" rev="latest" changing="true" transitive="true" />
+    	<dependency org="prom" name="BasicUtils" rev="latest" changing="true" transitive="true" />
+    	<dependency org="prom" name="Widgets" rev="latest" changing="true" transitive="true" />
+    	<dependency org="prom" name="Log" rev="latest" changing="true" transitive="true" />
+        <dependency org="prom" name="PetriNets" rev="latest" changing="true" transitive="true" />
+
+						</package>
+					</packages>
+				
